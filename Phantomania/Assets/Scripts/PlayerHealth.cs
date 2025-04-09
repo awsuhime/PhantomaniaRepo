@@ -14,18 +14,22 @@ public class PlayerHealth : MonoBehaviour
     private float fadeStart;
     public float timeToHeal = 50f;
 
+    private bool invincible;
+    private float invStart;
+    public float invincibility = 5f;
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Time.time - invStart > invincibility)
         {
-            takeDamage();
+            invincible = false;
         }
+        
 
         if (injured)
         {
             float timePassed = Time.time - fadeStart;
             float timeRatio = timePassed / timeToHeal;
-            Debug.Log("timeRatio: " + timeRatio + ", Formula: " + (maxInjuredOpacity - (maxInjuredOpacity * timeRatio)));
             
 
             injuredOverlay.color = new Color(injuredOverlay.color.r, injuredOverlay.color.g, injuredOverlay.color.b, maxInjuredOpacity - (maxInjuredOpacity * timeRatio) + alphaBonus);
@@ -39,15 +43,22 @@ public class PlayerHealth : MonoBehaviour
     }
     public void takeDamage()
     {
-        if (!injured)
+        if (!invincible)
         {
-            injured = true;
-            injuredOverlay.color = new Color(injuredOverlay.color.r, injuredOverlay.color.g, injuredOverlay.color.b, maxInjuredOpacity + alphaBonus);
-            fadeStart = Time.time;
+            if (!injured)
+            {
+                injured = true;
+                injuredOverlay.color = new Color(injuredOverlay.color.r, injuredOverlay.color.g, injuredOverlay.color.b, maxInjuredOpacity + alphaBonus);
+                fadeStart = Time.time;
+                invincible = true;
+                invStart = Time.time;
+            }
+            else
+            {
+                Debug.Log("Game over");
+                gameOver = true;
+            }
         }
-        else
-        {
-            gameOver = true;
-        }
+        
     }
 }
