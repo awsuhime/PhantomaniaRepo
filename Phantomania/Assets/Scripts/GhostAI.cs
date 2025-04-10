@@ -63,16 +63,16 @@ public class GhostAI : MonoBehaviour
 
             RaycastHit Hhit = new RaycastHit();
 
-            if (Vector3.Distance(transform.position, player.transform.position) < attackRange && !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out Hhit, Vector3.Distance(transform.position, player.transform.position), detLayers))
+            if (Vector3.Distance(transform.position, player.transform.position) < attackRange && !Physics.Raycast(transform.position, player.transform.position - transform.position, out Hhit, Vector3.Distance(transform.position, player.transform.position), detLayers))
             {
                 playerHealth.takeDamage();
             }
 
-                if (Vector3.Distance(transform.position, player.transform.position) < detectionRange)
-            {
+             if (Vector3.Distance(transform.position, player.transform.position) < detectionRange)
+             {
                 RaycastHit hit = new RaycastHit();
 
-                if (flash.state || !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Vector3.Distance(transform.position, player.transform.position), detLayers))
+                if (flash.state || !Physics.Raycast(transform.position, player.transform.position - transform.position, out hit, Vector3.Distance(transform.position, player.transform.position), detLayers))
                 {
                     state = "hunt";
                     searching = false;
@@ -166,7 +166,7 @@ public class GhostAI : MonoBehaviour
             {
                 RaycastHit hit = new RaycastHit();
 
-                if (flash.state || !Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Vector3.Distance(transform.position, player.transform.position), detLayers))
+                if (flash.state || !Physics.Raycast(transform.position, player.transform.position - transform.position, out hit, Vector3.Distance(transform.position, player.transform.position), detLayers))
                 {
                     agent.speed = chaseSpeed;
                     state = "hunt";
