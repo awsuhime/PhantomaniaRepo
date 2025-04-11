@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -13,6 +14,7 @@ public class GhostAI : MonoBehaviour
     public List<Room> rooms = new List<Room>();
 
     private GameObject player;
+    public GameObject playerModel;
     private PlayerHealth playerHealth;
     private Flashlight flash;
     public float detectionRange = 15f;
@@ -22,7 +24,9 @@ public class GhostAI : MonoBehaviour
     Vector3 target;
     private bool roomReached;
     private float wanderingRoomStart;
-    public float timeToWanderRoom = 20f;
+    public float baseTimeToWanderRoom = 20f;
+    private float timeToWanderRoom;
+    public float attentionSearchTime = 5f;
 
     public float baseSpeed = 3.5f;
     public float chaseSpeed = 7f;
@@ -30,6 +34,8 @@ public class GhostAI : MonoBehaviour
     private bool searching;
     private float searchStart;
     public float searchTime;
+    private bool clueSearching;
+    private Vector3 clue;
 
     public float attackRange = 2f;
 
@@ -38,6 +44,7 @@ public class GhostAI : MonoBehaviour
     // wander, 
     private void Start()
     {
+        timeToWanderRoom = baseTimeToWanderRoom;
         player = GameObject.FindGameObjectWithTag("Player");
         flash = player.GetComponent<Flashlight>();
         playerHealth = player.GetComponent<PlayerHealth>();
@@ -54,30 +61,40 @@ public class GhostAI : MonoBehaviour
     void Update()
     {
         
-        
+
+
 
         if (state == "hunt")
         {
             huntEffect.SetActive(true);
-            agent.SetDestination(player.transform.position);
+            if (!clueSearching)
+            {
+                agent.SetDestination(playerModel.transform.position);
+            }
+            else if (Vector3.Distance(transform.position, clue) < 2)
+            {
+                Debug.Log("Found clue.");
+                clueSearching = false;
+            }
 
             RaycastHit Hhit = new RaycastHit();
 
-            if (Vector3.Distance(transform.position, player.transform.position) < attackRange && !Physics.Raycast(transform.position, player.transform.position - transform.position, out Hhit, Vector3.Distance(transform.position, player.transform.position), detLayers))
+            if (Vector3.Distance(transform.position, playerModel.transform.position) < attackRange && !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out Hhit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
             {
                 playerHealth.takeDamage();
             }
 
-             if (Vector3.Distance(transform.position, player.transform.position) < detectionRange)
+             if (Vector3.Distance(transform.position, playerModel.transform.position) < detectionRange)
              {
                 RaycastHit hit = new RaycastHit();
 
-                if (flash.state || !Physics.Raycast(transform.position, player.transform.position - transform.position, out hit, Vector3.Distance(transform.position, player.transform.position), detLayers))
+                if (flash.state || !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out hit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
                 {
                     state = "hunt";
                     searching = false;
+                    clueSearching = false;
                 }
-                else
+                else if (!clueSearching)
                 {
                     if (!searching)
                     {
@@ -106,7 +123,7 @@ public class GhostAI : MonoBehaviour
                 }
             }
 
-            else
+            else if (!clueSearching)
             {
                 if (!searching)
                 {
@@ -149,7 +166,8 @@ public class GhostAI : MonoBehaviour
                 {
                     if (Time.time - wanderingRoomStart > timeToWanderRoom)
                     {
-                        Debug.Log("New room selected.");
+                    timeToWanderRoom = baseTimeToWanderRoom;
+                    Debug.Log("New room selected.");
                         roomReached = false;
                     
                         currentRoom = rooms[Random.Range(0, rooms.Count - 1)];
@@ -162,11 +180,11 @@ public class GhostAI : MonoBehaviour
                     }
                 }
 
-            if (Vector3.Distance(transform.position, player.transform.position) < detectionRange)
+            if (Vector3.Distance(transform.position, playerModel.transform.position) < detectionRange)
             {
                 RaycastHit hit = new RaycastHit();
 
-                if (flash.state || !Physics.Raycast(transform.position, player.transform.position - transform.position, out hit, Vector3.Distance(transform.position, player.transform.position), detLayers))
+                if (flash.state || !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out hit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
                 {
                     agent.speed = chaseSpeed;
                     state = "hunt";
@@ -175,11 +193,39 @@ public class GhostAI : MonoBehaviour
             }
 
         }
-        marker.transform.position = target;
+        marker.transform.position = agent.destination;
 
     }
 
-    
+    public void Attention(Vector3 goal, float range)
+    {
+        if (Vector3.Distance(transform.position, goal) < range)
+        {
+            if (state == "wander")
+            {
+                Debug.Log("Got ghost's attention.");
+                roomReached = false;
+                target = goal;
+                agent.SetDestination(target);
+                timeToWanderRoom = attentionSearchTime;
+
+            }
+            else if (state == "hunt" && searching)
+            {
+                Debug.Log("Clue seen.");
+                clue = goal;
+                clueSearching = true;
+                agent.SetDestination(clue);
+            }
+        }
+        else
+        {
+            Debug.Log("Ghost out of attention range.");
+        }
+       
+        
+
+    }
 
     [System.Serializable]
     public class Room

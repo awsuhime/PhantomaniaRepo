@@ -10,11 +10,13 @@ public class LightPlace : MonoBehaviour
     private int lightsPlaced;
     public int maxLights;
     public float pickupDistance = 5f;
+    public float attentionRange = 20f;
+    private GhostAI ghost;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        ghost = FindObjectOfType<GhostAI>();
     }
 
     // Update is called once per frame
@@ -35,15 +37,18 @@ public class LightPlace : MonoBehaviour
 
             if (closestLight != null)
             {
+                ghost.Attention(closestLight.transform.position, attentionRange);
                 placedLights.Remove(closestLight);
                 lightsPlaced--;
                 Destroy(closestLight);
+
             }
             else if (lightsPlaced < maxLights)    
             {
                 lightsPlaced++;
                 GameObject newLight = Instantiate(lightPrefab, model.transform.position, Quaternion.identity);
                 placedLights.Add(newLight);
+                ghost.Attention(model.transform.position, attentionRange);
             }
         }
         
