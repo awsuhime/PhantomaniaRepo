@@ -11,21 +11,25 @@ public class PlayerMovement : MonoBehaviour
     private float speed;
     public float regularSpeed = 4;
     public float sprintSpeed = 7;
+    public float sprintAttRange = 10f;
     private Rigidbody rb;
     public GameObject camObject;
     public GameObject model;
+    private GhostAI ghostAI;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        ghostAI = FindObjectOfType<GhostAI>();
     }
 
     void Update()
     {
 
         //Sprinting
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetMouseButton(1))
         {
             speed = sprintSpeed;
+            ghostAI.Attention(model.transform.position, sprintAttRange);
         }
         else
         {
