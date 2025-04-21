@@ -18,6 +18,7 @@ public class GhostAI : MonoBehaviour
     private PlayerHealth playerHealth;
     private Flashlight flash;
     public float detectionRange = 15f;
+    public float CthruWalls = 20f;
     public LayerMask detLayers;
     private Vector3 lastSeen;
     public GameObject marker;
@@ -27,13 +28,11 @@ public class GhostAI : MonoBehaviour
     public float baseTimeToWanderRoom = 20f;
     private float timeToWanderRoom;
     public float attentionSearchTime = 5f;
-
+    
     public float baseSpeed = 3.5f;
     public float chaseSpeed = 7f;
 
     private bool searching;
-    private float searchStart;
-    public float searchTime;
     private bool clueSearching;
     private Vector3 clue;
 
@@ -60,141 +59,146 @@ public class GhostAI : MonoBehaviour
 
     void Update()
     {
-        
-
-
 
         if (state == "hunt")
         {
-            huntEffect.SetActive(true);
-            if (!clueSearching)
-            {
-                agent.SetDestination(playerModel.transform.position);
-            }
-            else if (Vector3.Distance(transform.position, clue) < 2)
-            {
-                Debug.Log("Found clue.");
-                clueSearching = false;
-            }
-
-            RaycastHit Hhit = new RaycastHit();
-
-            if (Vector3.Distance(transform.position, playerModel.transform.position) < attackRange && !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out Hhit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
-            {
-                playerHealth.takeDamage();
-            }
-
-             if (Vector3.Distance(transform.position, playerModel.transform.position) < detectionRange)
-             {
-                RaycastHit hit = new RaycastHit();
-
-                if (flash.state || !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out hit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
-                {
-                    state = "hunt";
-                    searching = false;
-                    clueSearching = false;
-                }
-                else if (!clueSearching)
-                {
-                    if (!searching)
-                    {
-                        searchStart = Time.time;
-                        searching = true;
-                    }
-                    else if (Time.time - searchStart > searchTime)
-                    {
-                        agent.speed = baseSpeed;
-                        state = "wander";
-                        searching = false;
-
-
-                        Debug.Log("New room selected.");
-                        roomReached = false;
-
-                        currentRoom = rooms[Random.Range(0, rooms.Count - 1)];
-                        Bounds b = currentRoom.roomBounds.bounds;
-
-
-                        target = new Vector3(Random.Range(b.min.x, b.max.x), transform.position.y, Random.Range(b.min.z, b.max.z));
-                        marker.transform.position = target;
-
-                        agent.SetDestination(target);
-                    }
-                }
-            }
-
-            else if (!clueSearching)
-            {
-                if (!searching)
-                {
-                    searchStart = Time.time;
-                    searching = true;
-                }
-                else if (Time.time - searchStart > searchTime)
-                {
-                    agent.speed = baseSpeed;
-                    state = "wander";
-                    searching = false;
-
-
-                    Debug.Log("New room selected.");
-                    roomReached = false;
-
-                    currentRoom = rooms[Random.Range(0, rooms.Count - 1)];
-                    Bounds b = currentRoom.roomBounds.bounds;
-
-
-                    target = new Vector3(Random.Range(b.min.x, b.max.x), transform.position.y, Random.Range(b.min.z, b.max.z));
-                    marker.transform.position = target;
-
-                    agent.SetDestination(target);
-                }
-            }
+            Hunt();
         }
 
         else  if (state == "wander")
         {
-            huntEffect.SetActive(false);
-
-            if (!roomReached && Vector3.Distance(transform.position, target) < 5f)
-                {
-                    Debug.Log("Room reached.");
-                    roomReached = true;
-                    wanderingRoomStart = Time.time;
-                }
-                if (roomReached)
-                {
-                    if (Time.time - wanderingRoomStart > timeToWanderRoom)
-                    {
-                    timeToWanderRoom = baseTimeToWanderRoom;
-                    Debug.Log("New room selected.");
-                        roomReached = false;
-                    
-                        currentRoom = rooms[Random.Range(0, rooms.Count - 1)];
-                        Bounds b = currentRoom.roomBounds.bounds;
-
-                        
-                        target = new Vector3(Random.Range(b.min.x, b.max.x), transform.position.y, Random.Range(b.min.z, b.max.z));
-
-                        agent.SetDestination(target);
-                    }
-                }
-
-            if (Vector3.Distance(transform.position, playerModel.transform.position) < detectionRange)
-            {
-                RaycastHit hit = new RaycastHit();
-
-                if (flash.state || !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out hit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
-                {
-                    agent.speed = chaseSpeed;
-                    state = "hunt";
-
-                }
-            }
+            Wander();
 
         }
         marker.transform.position = agent.destination;
 
+    }
+
+    private void Hunt()
+    {
+        huntEffect.SetActive(true);
+        if (!clueSearching)
+        {
+            if (!searching)
+            {
+                agent.SetDestination(playerModel.transform.position);
+            }
+            else
+            {
+                agent.SetDestination(lastSeen);
+
+            }
+        }
+        else if (Vector3.Distance(transform.position, clue) < 2)
+        {
+            Debug.Log("Found clue.");
+            clueSearching = false;
+        }
+
+        RaycastHit Hhit = new RaycastHit();
+
+        if (Vector3.Distance(transform.position, playerModel.transform.position) < attackRange && !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out Hhit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
+        {
+            playerHealth.takeDamage();
+        }
+
+        if (Vector3.Distance(transform.position, playerModel.transform.position) < CthruWalls)
+        {
+            state = "hunt";
+            searching = false;
+            clueSearching = false;
+        }
+
+        else if (Vector3.Distance(transform.position, playerModel.transform.position) < detectionRange)
+        {
+            RaycastHit hit = new RaycastHit();
+
+            if (flash.state || !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out hit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
+            {
+                state = "hunt";
+                searching = false;
+                clueSearching = false;
+            }
+            else if (!clueSearching)
+            {
+                HandleSearching();
+            }
+        }
+
+        else if (!clueSearching)
+        {
+            HandleSearching();
+        }
+    }
+
+    private void Wander()
+    {
+        huntEffect.SetActive(false);
+
+        if (!roomReached && Vector3.Distance(transform.position, target) < 5f)
+        {
+            Debug.Log("Room reached.");
+            roomReached = true;
+            wanderingRoomStart = Time.time;
+        }
+        if (roomReached)
+        {
+            if (Time.time - wanderingRoomStart > timeToWanderRoom)
+            {
+                timeToWanderRoom = baseTimeToWanderRoom;
+                Debug.Log("New room selected.");
+                roomReached = false;
+
+                currentRoom = rooms[Random.Range(0, rooms.Count - 1)];
+                Bounds b = currentRoom.roomBounds.bounds;
+
+
+                target = new Vector3(Random.Range(b.min.x, b.max.x), transform.position.y, Random.Range(b.min.z, b.max.z));
+
+                agent.SetDestination(target);
+            }
+        }
+
+        if (Vector3.Distance(transform.position, playerModel.transform.position) < detectionRange)
+        {
+            RaycastHit hit = new RaycastHit();
+
+            if (flash.state || !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out hit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
+            {
+                agent.speed = chaseSpeed;
+                state = "hunt";
+
+            }
+        }
+    }
+
+    private void HandleSearching()
+    {
+        if (!searching)
+        {
+            lastSeen = playerModel.transform.position;
+
+            searching = true;
+        }
+        else if (Vector3.Distance(transform.position, lastSeen) < 0.3f)
+        {
+            agent.speed = baseSpeed;
+            state = "wander";
+            searching = false;
+
+
+            Debug.Log("New room selected.");
+            roomReached = false;
+
+            currentRoom = rooms[Random.Range(0, rooms.Count - 1)];
+            Bounds b = currentRoom.roomBounds.bounds;
+
+
+            target = new Vector3(Random.Range(b.min.x, b.max.x), transform.position.y, Random.Range(b.min.z, b.max.z));
+            marker.transform.position = target;
+
+            agent.SetDestination(target);
+        }
     }
 
     public void Attention(Vector3 goal, float range)

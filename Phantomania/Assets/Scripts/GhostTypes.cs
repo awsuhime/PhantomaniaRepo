@@ -13,7 +13,15 @@ public class GhostTypes : MonoBehaviour
     {
         ai = GetComponent<GhostAI>();
         chooseType();
-    }   
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            chooseType();
+        }
+    }
 
     public void chooseType()
     {
@@ -24,7 +32,7 @@ public class GhostTypes : MonoBehaviour
         ai.attentionSearchTime = type.clueSearch;
         ai.chaseSpeed = type.chaseSpeed;
         ai.detectionRange = type.detectionRange;
-
+        ai.CthruWalls = type.CthruRange;
 
 
     }
@@ -37,5 +45,6 @@ public class GhostTypes : MonoBehaviour
         public float clueSearch;
         public float chaseSpeed;
         public float detectionRange;
+        public float CthruRange;
     }
 }

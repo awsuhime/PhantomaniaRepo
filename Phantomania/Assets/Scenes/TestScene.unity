@@ -976,6 +976,7 @@ MonoBehaviour:
     roomBounds: {fileID: 1636160377}
   playerModel: {fileID: 1878256759}
   detectionRange: 45
+  CthruWalls: 0
   detLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -984,7 +985,6 @@ MonoBehaviour:
   attentionSearchTime: 5
   baseSpeed: 5
   chaseSpeed: 6
-  searchTime: 5
   attackRange: 4
   huntEffect: {fileID: 545618883}
 --- !u!195 &124211723
@@ -1025,44 +1025,52 @@ MonoBehaviour:
   - name: Bolt
     baseSearch: 1
     clueSearch: 3
-    chaseSpeed: 6.5
-    detectionRange: 45
+    chaseSpeed: 7.5
+    detectionRange: 50
+    CthruRange: 0
   - name: Brute
     baseSearch: 3.5
     clueSearch: 6.5
-    chaseSpeed: 5.75
-    detectionRange: 35
+    chaseSpeed: 6.75
+    detectionRange: 40
+    CthruRange: 0
   - name: Sight
     baseSearch: 2
     clueSearch: 5
-    chaseSpeed: 6
-    detectionRange: 52
+    chaseSpeed: 7
+    detectionRange: 57
+    CthruRange: 15
   - name: Shadow
     baseSearch: 2
     clueSearch: 4
-    chaseSpeed: 6
-    detectionRange: 35
+    chaseSpeed: 7
+    detectionRange: 40
+    CthruRange: 0
   - name: Spider
     baseSearch: 2
     clueSearch: 5
-    chaseSpeed: 6.25
-    detectionRange: 30
+    chaseSpeed: 7.25
+    detectionRange: 35
+    CthruRange: 0
   - name: Divergence
     baseSearch: 1
     clueSearch: 3
-    chaseSpeed: 5.75
-    detectionRange: 50
+    chaseSpeed: 6.75
+    detectionRange: 55
+    CthruRange: 0
   - name: Deceit
     baseSearch: 2
     clueSearch: 5
-    chaseSpeed: 6
-    detectionRange: 45
+    chaseSpeed: 7
+    detectionRange: 50
+    CthruRange: 0
   type:
     name: 
     baseSearch: 0
     clueSearch: 0
     chaseSpeed: 0
     detectionRange: 0
+    CthruRange: 0
 --- !u!1 &205245562
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,7 +2193,7 @@ MonoBehaviour:
   ySens: 500
   regularSpeed: 7
   sprintSpeed: 15
-  sprintAttRange: 30
+  sprintAttRange: 45
   camObject: {fileID: 284786929}
   model: {fileID: 1878256759}
 --- !u!4 &503565970
