@@ -91,8 +91,12 @@ public class GhostAI : MonoBehaviour
         }
         else if (Vector3.Distance(transform.position, clue) < 2)
         {
-            Debug.Log("Found clue.");
+            Debug.Log("clueSearching false, wander started");
             clueSearching = false;
+            target = clue;
+            agent.speed = baseSpeed;
+            state = "wander";
+            roomReached = false;
         }
 
         RaycastHit Hhit = new RaycastHit();
@@ -180,8 +184,9 @@ public class GhostAI : MonoBehaviour
 
             searching = true;
         }
-        else if (Vector3.Distance(transform.position, lastSeen) < 0.3f)
+        else if (Vector3.Distance(transform.position, lastSeen) < 2f)
         {
+            Debug.Log("Found lastSeen, entering wander");
             agent.speed = baseSpeed;
             state = "wander";
             searching = false;
