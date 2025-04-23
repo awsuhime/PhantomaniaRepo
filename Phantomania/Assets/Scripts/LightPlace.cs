@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LightPlace : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class LightPlace : MonoBehaviour
     public float pickupDistance = 5f;
     public float attentionRange = 20f;
     private GhostAI ghost;
+    public TextMeshProUGUI lightText;
 
     // Start is called before the first frame update
     void Start()
@@ -40,12 +42,14 @@ public class LightPlace : MonoBehaviour
                 ghost.Attention(closestLight.transform.position, attentionRange);
                 placedLights.Remove(closestLight);
                 lightsPlaced--;
+                lightText.text = (maxLights - lightsPlaced).ToString();
                 Destroy(closestLight);
 
             }
             else if (lightsPlaced < maxLights)    
             {
                 lightsPlaced++;
+                lightText.text = (maxLights - lightsPlaced).ToString();
                 GameObject newLight = Instantiate(lightPrefab, model.transform.position, Quaternion.identity);
                 placedLights.Add(newLight);
                 ghost.Attention(model.transform.position, attentionRange);

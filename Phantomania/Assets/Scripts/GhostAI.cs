@@ -28,7 +28,9 @@ public class GhostAI : MonoBehaviour
     public float baseTimeToWanderRoom = 20f;
     private float timeToWanderRoom;
     public float attentionSearchTime = 5f;
-    
+    public bool stunned;
+    private float stunStart;
+    private float stunTime;
     public float baseSpeed = 3.5f;
     public float chaseSpeed = 7f;
 
@@ -59,18 +61,26 @@ public class GhostAI : MonoBehaviour
 
     void Update()
     {
-
-        if (state == "hunt")
+        if (!stunned)
         {
-            Hunt();
-        }
+            if (state == "hunt")
+            {
+                Hunt();
+            }
 
-        else  if (state == "wander")
+            else if (state == "wander")
+            {
+                Wander();
+
+            }
+            marker.transform.position = agent.destination;
+        }
+        else if (Time.time - stunStart > stunTime)
         {
-            Wander();
+            stunned = false;
+            agent.isStopped = false;
 
         }
-        marker.transform.position = agent.destination;
 
     }
 
@@ -234,6 +244,14 @@ public class GhostAI : MonoBehaviour
        
         
 
+    }
+
+    public void Stun(float duration)
+    {
+        stunned = true;
+        stunStart = Time.time;
+        stunTime = duration;
+        agent.isStopped = true;
     }
 
     [System.Serializable]
