@@ -41,7 +41,6 @@ public class EMPGun : MonoBehaviour
             {
                 charging = false;
                 charged = true;
-                toolSelect.canSelect = true;
                 Debug.Log("Charging Done");
                 chargedStart = Time.time;
                 
@@ -51,6 +50,7 @@ public class EMPGun : MonoBehaviour
         }
         if (charged)
         {
+            toolSelect.canSelect = true;
             chargeText.text = (5 - Mathf.Round((Time.time - chargedStart) / chargeHoldTime * 5)).ToString();
             if (Input.GetKeyDown(KeyCode.E) || Time.time - chargedStart > chargeHoldTime)
             {
@@ -65,6 +65,8 @@ public class EMPGun : MonoBehaviour
                 }
                 ghost.Attention(model.transform.position, 150f);
                 chargeText.text = "";
+                charged = false;
+
             }
         }
     }

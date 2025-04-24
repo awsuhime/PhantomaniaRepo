@@ -61,21 +61,20 @@ public class GhostAI : MonoBehaviour
 
     void Update()
     {
-        if (!stunned)
-        {
-            if (state == "hunt")
+        
+        if (state == "hunt")
             {
                 Hunt();
             }
 
-            else if (state == "wander")
+        else if (state == "wander")
             {
                 Wander();
 
             }
-            marker.transform.position = agent.destination;
-        }
-        else if (Time.time - stunStart > stunTime)
+        marker.transform.position = agent.destination;
+        
+        if (stunned && Time.time - stunStart > stunTime)
         {
             stunned = false;
             agent.isStopped = false;
@@ -86,7 +85,8 @@ public class GhostAI : MonoBehaviour
 
     private void Hunt()
     {
-        huntEffect.SetActive(true);
+        
+        //huntEffect.SetActive(true);
         if (!clueSearching)
         {
             if (!searching)
@@ -96,7 +96,6 @@ public class GhostAI : MonoBehaviour
             else
             {
                 agent.SetDestination(lastSeen);
-
             }
         }
         else if (Vector3.Distance(transform.position, clue) < 2)
@@ -111,7 +110,7 @@ public class GhostAI : MonoBehaviour
 
         RaycastHit Hhit = new RaycastHit();
 
-        if (Vector3.Distance(transform.position, playerModel.transform.position) < attackRange && !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out Hhit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
+        if (!stunned && Vector3.Distance(transform.position, playerModel.transform.position) < attackRange && !Physics.Raycast(transform.position, playerModel.transform.position - transform.position, out Hhit, Vector3.Distance(transform.position, playerModel.transform.position), detLayers))
         {
             playerHealth.takeDamage();
         }
@@ -241,9 +240,6 @@ public class GhostAI : MonoBehaviour
         {
             Debug.Log("Ghost out of attention range.");
         }
-       
-        
-
     }
 
     public void Stun(float duration)
