@@ -8,12 +8,14 @@ public class ToolSelect : MonoBehaviour
     public int maxSelections = 3;
     public Image[] icons;
     private LightPlace lightPlace;
+    private CameraPlace cameraPlace;
     private EMPGun empGun;
     public bool canSelect = true;
     void Start()
     {
         lightPlace = GetComponent<LightPlace>();
         empGun = GetComponent<EMPGun>();
+        cameraPlace = GetComponent<CameraPlace>();
     }
 
     void Update()
@@ -57,7 +59,7 @@ public class ToolSelect : MonoBehaviour
         }
         else if (i == 2)
         {
-            
+            cameraPlace.enabled = state;
         }
         else if (i == 3)
         {

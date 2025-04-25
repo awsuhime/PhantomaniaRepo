@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         ghostAI = FindObjectOfType<GhostAI>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -35,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
         {
             speed = regularSpeed;
         }
-        Cursor.lockState = CursorLockMode.Locked;
         float xMouse = Input.GetAxisRaw("Mouse X") * Time.deltaTime * xSens;
         float yMouse = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * ySens;
 
