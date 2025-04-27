@@ -8,8 +8,8 @@ public class Index : MonoBehaviour
 
     public bool paused;
     public bool indUp = true;
-    
 
+    public GameObject currentPage;
     private void Start()
     {
        
@@ -40,5 +40,12 @@ public class Index : MonoBehaviour
         }
 
         
+    }
+
+    public void flipTo(GameObject page)
+    {
+        currentPage.SetActive(false);
+        page.SetActive(true);
+        currentPage = page;
     }
 }
