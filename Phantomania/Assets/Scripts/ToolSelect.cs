@@ -68,4 +68,15 @@ public class ToolSelect : MonoBehaviour
         }
     }
 
+    public void Deselect()
+    {
+        if (currentSelection != 0)
+        {
+            icons[currentSelection - 1].color = Color.white;
+            Toggle(currentSelection, false);
+            currentSelection = 0;
+        }
+        
+    }
+
 }

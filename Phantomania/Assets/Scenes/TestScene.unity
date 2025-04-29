@@ -4153,8 +4153,8 @@ MonoBehaviour:
   injured: 0
   gameOver: 0
   injuredOverlay: {fileID: 454801914}
-  maxInjuredOpacity: 0.5
-  alphaBonus: 0.2
+  maxInjuredOpacity: 0.2
+  alphaBonus: 0.25
   timeToHeal: 50
   invincibility: 5
 --- !u!114 &503565972
@@ -4248,7 +4248,6 @@ MonoBehaviour:
   camPrefab: {fileID: 541512181963123168, guid: 34c332c7dc0029048b4236af631de1be, type: 3}
   maxCams: 5
   pickupDistance: 5
-  attentionRange: 0
   camText: {fileID: 2132668513}
 --- !u!114 &503565977
 MonoBehaviour:
@@ -14631,9 +14630,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\tShadows hate being looked at through cameras. They will immediately
-    find you if you look at them for too long on the cameras. However, they can't
-    see very far in person.\n\n\tDuring their final chase, they will dim your flashlight."
+  m_text: "\tShadows hate being watched on cameras. They will immediately find you
+    if you stay on the cameras for too long at once. However, they can't see very
+    far in person.\n\n\tDuring their final chase, they will dim your flashlight."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 59f98e9b6a68bd04b8e6c8601f5823ce, type: 2}
   m_sharedMaterial: {fileID: -6780768163497408211, guid: 59f98e9b6a68bd04b8e6c8601f5823ce, type: 2}

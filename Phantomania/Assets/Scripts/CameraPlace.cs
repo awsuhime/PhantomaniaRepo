@@ -11,7 +11,6 @@ public class CameraPlace : MonoBehaviour
     private int camsPlaced;
     public int maxCams;
     public float pickupDistance = 5f;
-    public float attentionRange = 20f;
     private GhostAI ghost;
     public TextMeshProUGUI camText;
 
@@ -40,7 +39,6 @@ public class CameraPlace : MonoBehaviour
 
             if (closestLight != null)
             {
-                ghost.Attention(closestLight.transform.position, attentionRange);
                 placedLights.Remove(closestLight);
                 camsPlaced--;
                 camText.text = (maxCams - camsPlaced).ToString();
@@ -53,7 +51,6 @@ public class CameraPlace : MonoBehaviour
                 camText.text = (maxCams - camsPlaced).ToString();
                 GameObject newLight = Instantiate(camPrefab, model.transform.position, model.transform.rotation);
                 placedLights.Add(newLight);
-                ghost.Attention(model.transform.position, attentionRange);
             }
         }
 
