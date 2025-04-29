@@ -7,18 +7,20 @@ public class CameraPlace : MonoBehaviour
 {
     public GameObject model;
     public GameObject camPrefab;
-    private List<GameObject> placedLights = new List<GameObject>();
+    private List<GameObject> placedCams = new List<GameObject>();
     private int camsPlaced;
     public int maxCams;
     public float pickupDistance = 5f;
     private GhostAI ghost;
     public TextMeshProUGUI camText;
+    private PullUpCamera cameraPull;
 
     // Start is called before the first frame update
     void Start()
     {
         ghost = FindObjectOfType<GhostAI>();
         camText.text = (maxCams - camsPlaced).ToString();
+        cameraPull = GetComponent<PullUpCamera>();
     }
 
     // Update is called once per frame
@@ -28,7 +30,7 @@ public class CameraPlace : MonoBehaviour
         {
             float closestDistance = pickupDistance;
             GameObject closestLight = null;
-            foreach (GameObject g in placedLights)
+            foreach (GameObject g in placedCams)
             {
                 if (Vector3.Distance(model.transform.position, g.transform.position) < closestDistance)
                 {
@@ -39,7 +41,7 @@ public class CameraPlace : MonoBehaviour
 
             if (closestLight != null)
             {
-                placedLights.Remove(closestLight);
+                placedCams.Remove(closestLight);
                 camsPlaced--;
                 camText.text = (maxCams - camsPlaced).ToString();
                 Destroy(closestLight);
@@ -50,7 +52,8 @@ public class CameraPlace : MonoBehaviour
                 camsPlaced++;
                 camText.text = (maxCams - camsPlaced).ToString();
                 GameObject newLight = Instantiate(camPrefab, model.transform.position, model.transform.rotation);
-                placedLights.Add(newLight);
+                placedCams.Add(newLight);
+                cameraPull.registerCam(newLight);
             }
         }
 
