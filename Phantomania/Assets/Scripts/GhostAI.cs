@@ -42,6 +42,8 @@ public class GhostAI : MonoBehaviour
 
     public GameObject huntEffect;
 
+    
+
     // wander, 
     private void Start()
     {

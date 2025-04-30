@@ -7,25 +7,31 @@ public class GhostTypes : MonoBehaviour
     public Type[] types;
     public Type type;
     private GhostAI ai;
+
+    public int remnantsLeft = 3;
     
 
-    private void Start()
+    
+
+    
+
+    public void chooseType(int difficulty)
     {
         ai = GetComponent<GhostAI>();
-        chooseType();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha9))
+        int t = 0;
+        if (difficulty == 1)
         {
-            chooseType();
-        }
-    }
+            t = Random.Range(0, 3);
 
-    public void chooseType()
-    {
-        int t = Random.Range(0, types.Length);
+        }
+        else if (difficulty == 2)
+        {
+            t = Random.Range(0, 5);
+        }
+        else if (difficulty == 3)
+        {
+            t = Random.Range(0, 7);
+        }
         type = types[t];
         Debug.Log(type.name);
         ai.baseTimeToWanderRoom = type.baseSearch;
@@ -46,5 +52,13 @@ public class GhostTypes : MonoBehaviour
         public float chaseSpeed;
         public float detectionRange;
         public float CthruRange;
+    }
+
+    public void EMPReveal()
+    {
+        if (remnantsLeft == 0 && type.name == "Bolt")
+        {
+
+        }
     }
 }

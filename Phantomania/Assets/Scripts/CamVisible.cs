@@ -5,6 +5,7 @@ using UnityEngine;
 public class CamVisible : MonoBehaviour
 {
     public MeshRenderer render;
+    public SkinnedMeshRenderer skinRender;
 
     public bool realOnly;
     void Start()
@@ -16,11 +17,28 @@ public class CamVisible : MonoBehaviour
     {
         if (cam)
         {
-            render.enabled = !realOnly;
+            if (render != null)
+            {
+                render.enabled = !realOnly;
+
+            }
+            if (skinRender != null)
+            {
+                skinRender.enabled = !realOnly;
+            }
         }
         else
         {
-            render.enabled = realOnly;
+            if (render != null)
+            {
+                render.enabled = realOnly;
+
+            }
+            if (skinRender != null)
+            {
+                skinRender.enabled = realOnly;
+            }
+            
         }
         
     }
