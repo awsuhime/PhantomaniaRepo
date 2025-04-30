@@ -19,20 +19,23 @@ public class EMPGun : MonoBehaviour
     public float length = 10;
     public float stunDuration = 5f;
     public LayerMask movers;
+    private PullUpCamera pullUp;
     void Start()
     {
         toolSelect = GetComponent<ToolSelect>();
         ghost = FindObjectOfType<GhostAI>();
+        pullUp = GetComponent<PullUpCamera>();
     }
 
     void Update()
     {
-        if (!charging && !charged && Input.GetKeyDown(KeyCode.E))
+        if (!pullUp.pulledUp && !charging && !charged && Input.GetKeyDown(KeyCode.E))
         {
             toolSelect.canSelect = false;
             charging = true;
             chargeStart = Time.time;
             Debug.Log("Charging");
+            pullUp.canPullUp = false;
         }
         if (charging)
         {
@@ -50,7 +53,7 @@ public class EMPGun : MonoBehaviour
         }
         if (charged)
         {
-            toolSelect.canSelect = true;
+            
             chargeText.text = (5 - Mathf.Round((Time.time - chargedStart) / chargeHoldTime * 5)).ToString();
             if (Input.GetKeyDown(KeyCode.E) || Time.time - chargedStart > chargeHoldTime)
             {
@@ -66,6 +69,8 @@ public class EMPGun : MonoBehaviour
                 ghost.Attention(model.transform.position, 150f);
                 chargeText.text = "";
                 charged = false;
+                toolSelect.canSelect = true;
+                pullUp.canPullUp = true;
 
             }
         }

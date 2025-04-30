@@ -14,17 +14,19 @@ public class LightPlace : MonoBehaviour
     public float attentionRange = 20f;
     private GhostAI ghost;
     public TextMeshProUGUI lightText;
+    private PullUpCamera pullUp;
 
     // Start is called before the first frame update
     void Start()
     {
         ghost = FindObjectOfType<GhostAI>();
+        pullUp = GetComponent<PullUpCamera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!pullUp.pulledUp && Input.GetKeyDown(KeyCode.E))
         {
             float closestDistance = pickupDistance;
             GameObject closestLight = null;

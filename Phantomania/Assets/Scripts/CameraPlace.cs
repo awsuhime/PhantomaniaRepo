@@ -26,7 +26,7 @@ public class CameraPlace : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!cameraPull.pulledUp && Input.GetKeyDown(KeyCode.E))
         {
             float closestDistance = pickupDistance;
             GameObject closestLight = null;
@@ -41,6 +41,7 @@ public class CameraPlace : MonoBehaviour
 
             if (closestLight != null)
             {
+                cameraPull.destroyCam(closestLight);
                 placedCams.Remove(closestLight);
                 camsPlaced--;
                 camText.text = (maxCams - camsPlaced).ToString();

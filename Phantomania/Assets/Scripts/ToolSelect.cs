@@ -10,17 +10,19 @@ public class ToolSelect : MonoBehaviour
     private LightPlace lightPlace;
     private CameraPlace cameraPlace;
     private EMPGun empGun;
+    private PullUpCamera pullUp;
     public bool canSelect = true;
     void Start()
     {
         lightPlace = GetComponent<LightPlace>();
         empGun = GetComponent<EMPGun>();
         cameraPlace = GetComponent<CameraPlace>();
+        pullUp = GetComponent<PullUpCamera>();
     }
 
     void Update()
     {
-        if (canSelect)
+        if (canSelect && !pullUp.pulledUp)
         {
             for (int i = 1; i <= maxSelections; i++)
             {

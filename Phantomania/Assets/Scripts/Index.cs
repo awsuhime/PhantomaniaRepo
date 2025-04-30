@@ -10,6 +10,8 @@ public class Index : MonoBehaviour
     public bool indUp = true;
 
     public GameObject currentPage;
+
+    
     private void Start()
     {
        
