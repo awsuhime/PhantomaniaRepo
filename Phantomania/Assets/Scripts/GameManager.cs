@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     public void Restart()
     {
         Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
