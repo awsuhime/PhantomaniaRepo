@@ -13,6 +13,7 @@ public class EMPGun : MonoBehaviour
     private float chargedStart;
     public float chargeHoldTime = 5f;
     private GhostAI ghost;
+    private GhostTypes types;
     public TextMeshProUGUI chargeText;
     public GameObject model;
     public float width = 5;
@@ -20,11 +21,16 @@ public class EMPGun : MonoBehaviour
     public float stunDuration = 5f;
     public LayerMask movers;
     private PullUpCamera pullUp;
+    private CameraPlace cameraPlace;
+    private LightPlace lightPlace;
     void Start()
     {
         toolSelect = GetComponent<ToolSelect>();
         ghost = FindObjectOfType<GhostAI>();
         pullUp = GetComponent<PullUpCamera>();
+        types = FindObjectOfType<GhostTypes>();
+        lightPlace = GetComponent<LightPlace>();
+        cameraPlace = GetComponent<CameraPlace>();
     }
 
     void Update()
@@ -71,7 +77,14 @@ public class EMPGun : MonoBehaviour
                 charged = false;
                 toolSelect.canSelect = true;
                 pullUp.canPullUp = true;
-
+                if (Vector3.Distance(model.transform.position, ghost.gameObject.transform.position) > 50f)
+                {
+                    types.EMPReveal();
+                }
+                if (lightPlace.lightsPlaced == 0 && cameraPlace.camsPlaced == 0)
+                {
+                    types.lanternReveal();
+                }
             }
         }
     }

@@ -18,6 +18,8 @@ public class PullUpCamera : MonoBehaviour
     public PlacedCam currentCam;
     public Camera mainCamera;
 
+    public Color baseAmbient;
+
     private void Start()
     {
         index = GetComponent<Index>(); 
@@ -35,6 +37,7 @@ public class PullUpCamera : MonoBehaviour
                 mainCamera.enabled = true;
                 camUI.SetActive(true);
                 camVisibles(false);
+                RenderSettings.ambientLight = baseAmbient;
             }
             //Pull up or put down camera
             else if (pulledUp)

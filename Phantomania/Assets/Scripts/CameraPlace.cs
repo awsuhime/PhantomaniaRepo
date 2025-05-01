@@ -8,7 +8,7 @@ public class CameraPlace : MonoBehaviour
     public GameObject model;
     public GameObject camPrefab;
     private List<GameObject> placedCams = new List<GameObject>();
-    private int camsPlaced;
+    public int camsPlaced;
     public int maxCams;
     public float pickupDistance = 5f;
     private GhostAI ghost;

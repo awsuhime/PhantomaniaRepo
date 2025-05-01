@@ -8,7 +8,7 @@ public class LightPlace : MonoBehaviour
     public GameObject model;
     public GameObject lightPrefab;
     private List<GameObject> placedLights = new List<GameObject>();
-    private int lightsPlaced;
+    public int lightsPlaced;
     public int maxLights;
     public float pickupDistance = 5f;
     public float attentionRange = 20f;

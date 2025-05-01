@@ -10,6 +10,7 @@ public class CamButton : MonoBehaviour
     private PlacedCam cam;
     public Image img;
     private bool synced;
+    public Color newAmbient;
 
     void Start()
     {
@@ -27,6 +28,8 @@ public class CamButton : MonoBehaviour
             pullUp.disableMainCam();
             pullUp.camUI.SetActive(false);
             pullUp.camVisibles(true);
+            RenderSettings.ambientLight = newAmbient;
+
         }
     }
 

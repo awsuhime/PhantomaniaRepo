@@ -11,10 +11,11 @@ public class GameManager : MonoBehaviour
     public GameObject titleUI;
     public GhostAI ghost;
     public GameObject[] remnants;
+    public GameObject winUI;
     
     public void StartGame(int difficulty)
     {
-        Destroy(titleCamera);
+        titleCamera.SetActive(false);
         titleUI.SetActive(false);
         foreach (GameObject g in objectsToEnable)
         {
@@ -34,6 +35,18 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void endGame()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        titleCamera.SetActive(true);
+        winUI.SetActive(true);
+        foreach (GameObject g in objectsToEnable)
+        {
+            g.SetActive(false);
+        }
     }
 }

@@ -7,17 +7,19 @@ public class GhostTypes : MonoBehaviour
     public Type[] types;
     public Type type;
     private GhostAI ai;
+    private GameManager manager;
 
     public int remnantsLeft = 3;
-    
+
 
     
 
-    
+
 
     public void chooseType(int difficulty)
     {
         ai = GetComponent<GhostAI>();
+        manager = FindObjectOfType<GameManager>();
         int t = 0;
         if (difficulty == 1)
         {
@@ -58,7 +60,23 @@ public class GhostTypes : MonoBehaviour
     {
         if (remnantsLeft == 0 && type.name == "Bolt")
         {
+            manager.endGame();
+        }
+    }
 
+    public void chaseReveal()
+    {
+        if (remnantsLeft == 0 && type.name == "Brute")
+        {
+            manager.endGame();
+        }
+    }
+
+    public void lanternReveal()
+    {
+        if (remnantsLeft == 0 && type.name == "Sight")
+        {
+            manager.endGame();
         }
     }
 }

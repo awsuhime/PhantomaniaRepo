@@ -12,7 +12,7 @@ public class GhostAI : MonoBehaviour
     private NavMeshAgent agent;
     public Room currentRoom;
     public List<Room> rooms = new List<Room>();
-
+    private GhostTypes types;
     private GameObject player;
     public GameObject playerModel;
     private PlayerHealth playerHealth;
@@ -42,6 +42,10 @@ public class GhostAI : MonoBehaviour
 
     public GameObject huntEffect;
 
+    private float huntStart;
+    private bool hunting;
+    
+
     
 
     // wander, 
@@ -55,6 +59,7 @@ public class GhostAI : MonoBehaviour
         state = "wander";
         currentRoom = rooms[Random.Range(0, rooms.Count - 1)];
         Bounds b = currentRoom.roomBounds.bounds;
+        types = GetComponent<GhostTypes>();
 
         target = new Vector3(Random.Range(b.min.x, b.max.x), transform.position.y, Random.Range(b.min.z, b.max.z));
         marker.transform.position = target;
@@ -87,6 +92,16 @@ public class GhostAI : MonoBehaviour
 
     private void Hunt()
     {
+        if (!hunting)
+        {
+            hunting = true;
+            huntStart = Time.time;
+        }
+        else if (Time.time - huntStart > 20)
+        {
+            types.chaseReveal();
+            hunting = false;
+        }
         
         //huntEffect.SetActive(true);
         if (!clueSearching)
@@ -149,6 +164,7 @@ public class GhostAI : MonoBehaviour
     private void Wander()
     {
         huntEffect.SetActive(false);
+        hunting = false;
 
         if (!roomReached && Vector3.Distance(transform.position, target) < 5f)
         {

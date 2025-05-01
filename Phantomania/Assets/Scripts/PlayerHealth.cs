@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public Image injuredOverlay;
     public float maxInjuredOpacity;
     public float alphaBonus = 0.3f;
+    private GameManager gameManager;
 
     private float fadeStart;
     public float timeToHeal = 50f;
@@ -18,6 +19,10 @@ public class PlayerHealth : MonoBehaviour
     private float invStart;
     public float invincibility = 5f;
 
+    private void Start()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
     private void Update()
     {
         if (Time.time - invStart > invincibility)
@@ -55,8 +60,9 @@ public class PlayerHealth : MonoBehaviour
             }
             else
             {
-                Debug.Log("Game over");
                 gameOver = true;
+                gameManager.Restart();
+
             }
         }
         

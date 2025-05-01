@@ -91,6 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   corCam: {fileID: 0}
   img: {fileID: 7716974438644840582}
+  newAmbient: {r: 1, g: 1, b: 1, a: 0}
 --- !u!114 &219803974029658441
 MonoBehaviour:
   m_ObjectHideFlags: 0
